@@ -27,48 +27,36 @@ struct ContentView: View {
             tagsTab
                 .tabItem { Label("Tags", systemImage: "tag") }
         }
-        .padding()
-        .frame(width: 480, height: 460)
     }
 
     private var summaryTab: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Paste or edit text below:")
-                .font(.headline)
-            TextEditor(text: $articleText)
-                .frame(height: 140)
-                .overlay(RoundedRectangle(cornerRadius: 6).stroke(.separator))
-
-            Divider()
-
-            Text("Summary")
-                .font(.headline)
-            ScrollView {
-                SummaryView(text: articleText)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        NavigationStack {
+            Form {
+                Section("Paste or edit text") {
+                    TextEditor(text: $articleText)
+                        .frame(height: 160)
+                }
+                Section("Summary") {
+                    SummaryView(text: articleText)
+                }
             }
+            .navigationTitle("Summary")
         }
-        .padding()
     }
 
     private var tagsTab: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("One item per line:")
-                .font(.headline)
-            TextEditor(text: $itemsText)
-                .frame(height: 140)
-                .overlay(RoundedRectangle(cornerRadius: 6).stroke(.separator))
-
-            Divider()
-
-            Text("Categorized")
-                .font(.headline)
-            ScrollView {
-                SmartTagView(items: parsedItems)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        NavigationStack {
+            Form {
+                Section("One item per line") {
+                    TextEditor(text: $itemsText)
+                        .frame(height: 160)
+                }
+                Section("Categorized") {
+                    SmartTagView(items: parsedItems)
+                }
             }
+            .navigationTitle("Tags")
         }
-        .padding()
     }
 
     private var parsedItems: [String] {
